@@ -11,7 +11,7 @@ WORKDIR /helloworld/
 RUN mvn clean package
 
 #  Deploy to tomcat
-RUN mv target/helloworld.war /usr/local/tomcat/webapps/
+RUN mv target/helloworld.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
