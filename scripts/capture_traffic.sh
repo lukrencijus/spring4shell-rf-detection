@@ -6,6 +6,14 @@ interface=""
 packet_amount=
 file_amount=
 
+echo "This script requires manual tshark installation. "
+echo "Make sure tshark is installed and can be ran at the user level. "
+read -p "Do you want to continue? (y/n) " response
+if [ $response != "y" ] ; then 
+    echo "Exiting..."
+    exit 0
+fi
+
 read -p "Listen for local traffic? (y/n) " response
 if [ $response == "y" ] ; then
     interface="lo"

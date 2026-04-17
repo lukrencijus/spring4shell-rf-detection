@@ -9,11 +9,13 @@ read -p "Please insert the amount of iterations (digit): " iterations
 
 echo "Running $iterations amount of iterations"
 for  ((i=1; i<=iterations; i++)) ; do
+	page=$((i/5))
 	curl "$base"/
 	curl -d courseName="NewCourse$i" -d instructor="CourseInstructor$i" -d email="CourseEmail$i" "$base"/save
-	curl "$base"/
+	curl "$base"/"?sortField=courseName&sortDir=asc"
 	sleep 0.5
 	curl -d courseName="NewCourse$RANDOM" -d id="$i" -d instructor="CourseInstructor$RANDOM" -d email="CourseEmail$RANDOM" "$base"/save
+	curl "$base"/page/"$page""?sortField=courseName&sortDir=desc"
 	curl "$base"/delete/"$i"
 	sleep 1
 done
