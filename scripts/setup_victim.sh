@@ -35,6 +35,12 @@ EOF
 	apt install python3 -y
 	apt install python3-requests -y
 
+	# Tshark installation (allow non-root capture)
+	echo "wireshark-common wireshark-common/install-setuid boolean true" | debconf-set-selections
+	DEBIAN_FRONTEND=noninteractive apt install tshark -y
+	usermod -aG wireshark $SUDO_USER 2>/dev/null || usermod -aG wireshark $USER
+	echo "Note: Log out and back in for wireshark group to take effect"
+
 elif [ "$response" != "n" ] ; then
 	echo "Invalid input detected"
 	echo "Exiting..."
