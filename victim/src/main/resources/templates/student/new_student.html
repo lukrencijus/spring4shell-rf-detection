@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Student Tracker</title>
+    <link rel="stylesheet" 
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" 
+          crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <h1>Student Tracker</h1>
+        <hr>
+        <h2>Add New Student</h2>
+        
+        <form action="#" th:action="@{/students/save}" th:object="${student}" method="POST">
+            <input type="text" 
+                   th:field="*{firstName}" 
+                   placeholder="First Name" 
+                   class="form-control mb-4 col-4">
+            
+            <input type="text" 
+                   th:field="*{lastName}" 
+                   placeholder="Last Name" 
+                   class="form-control mb-4 col-4">
+            
+            <input type="text" 
+                   th:field="*{studentId}" 
+                   placeholder="Student ID" 
+                   class="form-control mb-4 col-4">
+            
+            <input type="text" 
+                   th:field="*{major}" 
+                   placeholder="Major" 
+                   class="form-control mb-4 col-4">
+            
+            <button type="submit" class="btn btn-info col-2">Save Student</button>
+        </form>
+        
+        <hr>
+        <a th:href="@{/students/}">Back to Student List</a>
+    </div>
+</body>
+</html>
