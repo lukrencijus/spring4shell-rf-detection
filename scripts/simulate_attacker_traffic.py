@@ -42,6 +42,7 @@ def extract_db_file(url, recon_data):
         f.write(file_contents)
 
 def main():
+    isDBExtracted = False
     if len(sys.argv) < 2 or len(sys.argv) > 3:
         print("Program expects a url as an argument. \nUsage: python3 simulate_attacker_traffic.py <url/to/jsp> <repeat_times (optional)>")
         sys.exit(1)
@@ -63,13 +64,15 @@ def main():
             if recon_data.get("db").index("file") != 0:
                 print("[*] Performing db file extraction")
                 extract_db_file(webshell_url, recon_data)
+                isDBExtracted = True
             sleep(1)
     except:
         print("There was an error while executing the attack. Exiting...")
         sys.exit(1)
-    print("Printing reconnaissance data:")
+    print("[*] Printing reconnaissance data:")
     print(json.dumps(recon_data, indent=2))
-    print("DB dump can be found db_dump.txt (base64 encoded)")
+    if isDBExtracted:
+        print("[*] DB dump can be found db_dump.txt (base64 encoded)")
 
 if __name__ == '__main__':
     main()
