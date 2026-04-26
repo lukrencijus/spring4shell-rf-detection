@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Instructor Tracker</title>
+    <link rel="stylesheet" 
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Instructor Tracker</h1>
+        <hr>
+        <h2>Update Instructor</h2>
+        
+        <form action="#" th:action="@{/instructors/save}" th:object="${instructor}" method="POST">
+            <input type="hidden" th:field="*{id}" />
+            
+            <input type="text" 
+                   th:field="*{instructorName}" 
+                   class="form-control mb-4 col-4" 
+                   placeholder="Instructor Name">
+            
+            <input type="text" 
+                   th:field="*{employeeId}" 
+                   class="form-control mb-4 col-4" 
+                   placeholder="Employee ID">
+            
+            <input type="text" 
+                   th:field="*{email}" 
+                   class="form-control mb-4 col-4" 
+                   placeholder="Email">
+            
+            <input type="text" 
+                   th:field="*{officeLocation}" 
+                   class="form-control mb-4 col-4" 
+                   placeholder="Office Location">
+            
+            <button type="submit" class="btn btn-info col-2">Update Instructor</button>
+        </form>
+        
+        <hr>
+        <a th:href="@{/instructors/}">Back to Instructor List</a>
+    </div>
+</body>
+</html>
