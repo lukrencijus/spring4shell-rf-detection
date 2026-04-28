@@ -1,4 +1,4 @@
-kpackage com.helloworld;
+package com.helloworld;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
