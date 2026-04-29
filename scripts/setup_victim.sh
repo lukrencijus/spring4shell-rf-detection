@@ -3,7 +3,7 @@ set -e
 
 response=""
 
-echo "This script installs required dependencies (docker, tshark) and(or) launches the victim container."
+echo "This script installs required dependencies (docker, tshark, python3-requests) and(or) launches the victim container."
 
 read -p 'Do you want to install dependencies (first time run) y/n?' response
 
@@ -30,6 +30,8 @@ EOF
 	apt update
 
 	apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+	apt install python3 -y
+	apt install python3-requests -y
 
 	# Tshark installation (allow non-root capture)
 	echo "wireshark-common wireshark-common/install-setuid boolean true" | debconf-set-selections
