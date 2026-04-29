@@ -107,7 +107,7 @@ try:
         walk_through_instructors(i)
         walk_through_sutents(i)
         invalid_traffic()
-        sleep(3)
+        sleep(0.2)
 except Exception as e:
     print("Something went wrong")
     print(e)

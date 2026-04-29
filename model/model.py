@@ -10,8 +10,7 @@ required_fields = [ 'label', 'bidirectional_packets',
                     'src2dst_packets',  'dst2src_packets', 'bidirectional_syn_packets',
                     'bidirectional_ack_packets', 'bidirectional_psh_packets', 'src2dst_syn_packets', 'src2dst_ack_packets', 'src2dst_psh_packets',
                     'dst2src_syn_packets', 'dst2src_ack_packets', 'dst2src_psh_packets', 
-                    'dst2src_duration_ms', 'src2dst_duration_ms', 'bidirectional_duration_ms',
-                ]
+                    'dst2src_duration_ms', 'src2dst_duration_ms', 'bidirectional_duration_ms' ]
 # 'dst2src_min_ps' 'src2dst_min_ps' 'src2dst_mean_ps' 'src2dst_max_ps', 'dst2src_max_ps', 'dst2src_mean_ps', 'src2dst_bytes', 'dst2src_bytes', 'bidirectional_bytes',
 # Removed due to size fingerprinting caused by insufficient size in benign traffic packets
 # Results in > 0.99 accuracy
