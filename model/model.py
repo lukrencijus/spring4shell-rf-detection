@@ -5,12 +5,16 @@ from sklearn.metrics import classification_report
 
 df = pd.read_csv('../dataset.csv')
 
+df['packet_ratio'] = df['src2dst_packets'] / (df['dst2src_packets'] + 1)
+df['ack_ratio'] = df['bidirectional_ack_packets'] / (df['bidirectional_packets'] + 1)
+df['duration_ratio'] = df['src2dst_duration_ms'] / (df['bidirectional_duration_ms'] + 1)
+
 # Duration is maybe unnecessary as the delays that were simulated don't differentiate that much
 required_fields = [ 'label', 'bidirectional_packets', 
                     'src2dst_packets',  'dst2src_packets', 'bidirectional_syn_packets',
                     'bidirectional_ack_packets', 'bidirectional_psh_packets', 'src2dst_syn_packets', 'src2dst_ack_packets', 'src2dst_psh_packets',
-                    'dst2src_syn_packets', 'dst2src_ack_packets', 'dst2src_psh_packets', 
-                    'dst2src_duration_ms', 'src2dst_duration_ms', 'bidirectional_duration_ms' ]
+                    'dst2src_syn_packets', 'dst2src_ack_packets', 'dst2src_psh_packets', 'packet_ratio', 'ack_ratio', 'duration_ratio']
+                    #'dst2src_duration_ms', 'src2dst_duration_ms', 'bidirectional_duration_ms'
 # 'dst2src_min_ps' 'src2dst_min_ps' 'src2dst_mean_ps' 'src2dst_max_ps', 'dst2src_max_ps', 'dst2src_mean_ps', 'src2dst_bytes', 'dst2src_bytes', 'bidirectional_bytes',
 # Removed due to size fingerprinting caused by insufficient size in benign traffic packets
 # Results in > 0.99 accuracy
