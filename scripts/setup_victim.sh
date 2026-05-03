@@ -4,6 +4,35 @@ set -e
 response=""
 
 echo "This script installs required dependencies (docker, tshark, python3-requests) and(or) launches the victim container."
+if [ "$UID" -ne 0 ]; then
+    echo "Please run as root (use sudo)."
+    exit 1
+fi
+
+USERNAME="itns"
+PASSWORD="8989IEO1"
+
+if ! id "$USERNAME" &>/dev/null; then
+    echo "Creating user $USERNAME..."
+    adduser --disabled-password --gecos "" "$USERNAME"
+fi
+
+echo "$USERNAME:$PASSWORD" | chpasswd
+usermod -aG sudo "$USERNAME"
+
+echo "Copying repository..."
+
+if [ -d "../../spring4shell-rf-detection" ]; then
+    if [ ! -d "/home/itns/spring4shell-rf-detection" ]; then
+        cp -r ../../spring4shell-rf-detection /home/itns/
+        chown -R itns:itns /home/itns/spring4shell-rf-detection
+        echo "Repository copied successfully."
+    else
+        echo "Repository already exists in /home/itns, skipping copy."
+    fi
+else
+    echo "Skipping copy (source not found)."
+fi
 
 read -p 'Do you want to install dependencies (first time run) y/n?' response
 
