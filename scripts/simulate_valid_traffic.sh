@@ -46,7 +46,6 @@ walk_through_instructors(){
 }
 
 invalid_traffic(){
-	agent=$1
 	curl "$base"/courses
 	curl "$base"/courses?not!existing
 	curl "$base"/more/non/existing#traffic

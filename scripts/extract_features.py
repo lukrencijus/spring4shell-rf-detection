@@ -1,12 +1,48 @@
 import os
+import subprocess
 import pandas as pd
 from nfstream import NFStreamer
 
-DATA_DIR = "data"
-OUTPUT_CSV = "dataset.csv"
+DATA_DIR = "../data"
+OUTPUT_CSV = "../dataset.csv"
 
 splits = ["learning", "testing", "validating"]
 labels = {"malicious": 1, "normal": 0}
+
+
+def get_payload_from_tshark(pcap_path):
+    """Runs tshark to get TCP payload and decodes hex to ASCII (LIMITED to 2000 bytes)                                                                                                            chars)."""
+    cmd = ['tshark', '-r', pcap_path, '-T', 'fields', '-e', 'tcp.payload']
+
+    try:
+        raw_hex = subprocess.check_output(cmd, stderr=subprocess.DEVNULL).decode                                                                                                             ('utf-8')
+        lines = [line.strip() for line in raw_hex.splitlines() if line.strip()]
+
+        ascii_payloads = []
+        total_chars = 0
+        LIMIT = 2000
+
+        for hex_str in lines:
+            try:
+                text = bytes.fromhex(hex_str).decode('utf-8', errors='ignore')
+
+                remaining = LIMIT - total_chars
+                if remaining <= 0:
+                    break
+
+                # truncate per chunk
+                text = text[:remaining]
+                ascii_payloads.append(text)
+                total_chars += len(text)
+
+            except Exception:
+                continue
+
+        return " ".join(ascii_payloads)
+
+    except Exception:
+        return ""
+
 
 all_dfs = []
 
@@ -28,6 +64,8 @@ for split in splits:
                 if df.empty:
                     print(f"  EMPTY: {pcap_file}")
                     continue
+                payload_text = get_payload_from_tshark(pcap_path)
+                df["raw_payload"] = payload_text
                 df["label"] = label_val
                 df["split"] = split
                 df["source_file"] = pcap_file
