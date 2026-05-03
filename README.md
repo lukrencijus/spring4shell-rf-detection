@@ -56,13 +56,14 @@ sudo ./setup_data.sh
 ### Generate Normal Traffic Data
 ```bash
 # In one terminal: Simulate normal traffic
+cd scripts
 python3 simulate_valid_traffic.py
 
 # In another: capture traffic
 ./capture_traffic.sh
 ```
 
-### Generate Abnormal Traffic
+### Generate Abnormal Traffic Data
 ```bash
 # In one terminal: Run poc and simulate abnormal traffic
 cd ../poc
@@ -76,7 +77,6 @@ python3 simulate_attacker_traffic.py http://localhost:8080/shell.jsp
 
 ### Feature Extraction
 ```bash
-cd scripts
 python3 extract_features.py
 ```
 
